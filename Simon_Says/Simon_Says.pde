@@ -2,25 +2,18 @@
 
 struct Point 
 {
-  int x;
-  int y;
+ int x;
+ int y;
 };
 
-int direction = 270;
-
-Point a1 = {4,5};
-Point a2 = {6,4};
-Point a3 = {0,4};
-Point a4 = {3,2};
-
-int marker = 4; 
-
-Point arrows[64] = {a1,a2,a3,a4}; 
+int myArray[4];
+boolean playerTurn = false;
 
 void setup()                    // run once, when the sketch starts
 {
   MeggyJrSimpleSetup();      // Required code, line 2 of 2.
   Serial.begin(9600);
+  showArray();
 }
 
 void lightGreen() //lights green and plays tone, up
@@ -99,39 +92,13 @@ void lightBlue()
 
 void loop()                     // run over and over again
 {
-/* Check whose turn it is
-If it's computer's turn, computerTurn();
-else playerTurn();
-Computer's Turn:
-Generate solution array (4 length)
-Go throgh array, if it's a 0, lightGreen(); else if it's a 90, lightBlue(); etc.
-Player's turn:
-Create an array
-Check buttons
-if it's Up, lightGreen() and store a 0 in the array. Else if it's 90, lightBlue() and store a 90 in the playerArray
-WHen you reach the end of the array, compoare the numbres in the two arrays. If match, then WIN, else computerTurn()
+  if (playerTurn)
+    player();
+  else showArray();
+  
+
+  DisplaySlate();
 }
-
-
-CheckButtonsPress();
-    if (Button_Up)
-  {
-    direction = 0;     //add 1 to y value  
-  }
-  if (Button_Right)
-  { 
-    direction = 90;    //add 1 to x value
-  }
-  if (Button_Down)
-  {   
-     direction = 180;    //subtract 1 from y value
-  }
-  if (Button_Left)
-  {
-    direction = 270;    //subtract 1 from x value
-  }
-  
-  
 
 void ArrowUp()
 {
@@ -148,4 +115,60 @@ void ArrowUp()
   DrawPx(5,7,DimGreen);
   DrawPx(6,7,DimGreen);
 }
+
+void player()
+{
+  int marker = 0;
+  while (marker < myArray.length)
+  {
+  CheckButtonsPress();
+  if (Button_Up)
+  {
+    myArray[marker] = 360;
+    marker++;
+  }
+  if (Button_Right)
+  { 
+    myArray[marker] = 90;    
+    marker++;
+  }
+  if (Button_Down)
+  {   
+    myArray[marker] = 180;  
+    marker++;  
+  }
+  if (Button_Left)
+  {
+    myArraymarker[marker] = 270;  
+    marker++;  
+  }
+  
+  //code that compares myArray to SolutionArray
+  
+  void showArray()
+  {
+    int marker = 0;
+    while (marker < solutionArray.length)
+    {
+      if (myArray[marker] == 360)
+      {
+        lightGreen();
+      }
+      if (myArray[marker] == 90)
+      {
+        lightRed();
+      }
+      if (myArray[marker] == 180)
+      {
+        lightYellow();
+      }
+      if (myArray[marker] == 270()
+      {
+        lightBlue();
+      }  
+    }
+  }
+  
+
+  
 
