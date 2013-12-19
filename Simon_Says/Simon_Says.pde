@@ -9,6 +9,7 @@ struct Point
 int myArray[4];
 boolean playerTurn = false;
 
+
 void setup()                    // run once, when the sketch starts
 {
   MeggyJrSimpleSetup();      // Required code, line 2 of 2.
@@ -96,7 +97,10 @@ void loop()                     // run over and over again
     player();
   else showArray();
   
-
+  if (computerTurn)
+    computer();
+    else startArray();
+    
   DisplaySlate();
 }
 
@@ -115,6 +119,15 @@ void ArrowUp()
   DrawPx(5,7,DimGreen);
   DrawPx(6,7,DimGreen);
 }
+
+void computer()
+{
+  while (i<225)
+  {
+    nextNum = random (1,5);
+    sequence[i] = nextNum;
+    i++
+  }
 
 void player()
 {
