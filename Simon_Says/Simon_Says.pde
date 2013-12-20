@@ -1,3 +1,4 @@
+// Tome Says by Jordan Tome
 #include <MeggyJrSimple.h>    // Required code, line 1 of 2.
 
 struct Point 
@@ -8,6 +9,8 @@ struct Point
 
 int myArray[4];
 boolean playerTurn = false;
+boolean computerTurn = false;
+
 
 
 void setup()                    // run once, when the sketch starts
@@ -15,6 +18,7 @@ void setup()                    // run once, when the sketch starts
   MeggyJrSimpleSetup();      // Required code, line 2 of 2.
   Serial.begin(9600);
   showArray();
+  startArray();
 }
 
 void lightGreen() //lights green and plays tone, up
@@ -93,20 +97,24 @@ void lightBlue()
 
 void loop()                     // run over and over again
 {
-  if (playerTurn)
-    player();
-  else showArray();
+  drawBoard();
+  DisplaySlate();
   
   if (computerTurn)
-    computer();
-    else startArray();
-    
+  startArray();
+  DisplaySlate();
+  delay(200);
+  ClearSlate();
+  
+  if (playerTurn)
+  player();
+  else showArray();  
   DisplaySlate();
 }
 
-void ArrowUp()
+void drawBoard()    //displays dim colored board
 {
-  DrawPx(4,5,DimGreen);
+  DrawPx(4,5,DimGreen); //up
   DrawPx(4,6,DimGreen);
   DrawPx(4,7,DimGreen);
   DrawPx(3,5,DimGreen);
@@ -118,21 +126,54 @@ void ArrowUp()
   DrawPx(5,6,DimGreen);
   DrawPx(5,7,DimGreen);
   DrawPx(6,7,DimGreen);
+  
+  DrawPx(6,4,DimRed);  //right
+  DrawPx(6,3,DimRed);
+  DrawPx(5,4,DimRed);
+  DrawPx(5,3,DimRed);
+  DrawPx(7,2,DimRed);
+  DrawPx(7,3,DimRed);
+  DrawPx(7,4,DimRed);
+  DrawPx(7,5,DimRed);
+  DrawPx(7,6,DimRed);
+  DrawPx(6,2,DimRed);
+  DrawPx(6,5,DimRed);
+  DrawPx(7,1,DimRed);
+  
+  DrawPx(0,4,DimYellow);  //left
+  DrawPx(0,3,DimYellow);
+  DrawPx(0,2,DimYellow);
+  DrawPx(0,1,DimYellow);
+  DrawPx(0,5,DimYellow);
+  DrawPx(0,6,DimYellow);
+  DrawPx(1,2,DimYellow);
+  DrawPx(1,5,DimYellow);
+  DrawPx(1,4,DimYellow);  
+  DrawPx(1,3,DimYellow);
+  DrawPx(2,4,DimYellow);
+  DrawPx(2,3,DimYellow);
+  
+  DrawPx(3,2,DimBlue);  //down
+  DrawPx(3,1,DimBlue);
+  DrawPx(3,0,DimBlue);
+  DrawPx(2,1,DimBlue);
+  DrawPx(1,0,DimBlue);
+  DrawPx(4,2,DimBlue);
+  DrawPx(4,1,DimBlue);
+  DrawPx(4,0,DimBlue);
+  DrawPx(5,1,DimBlue);
+  DrawPx(5,0,DimBlue);
+  DrawPx(6,0,DimBlue);
+  DrawPx(2,0,DimBlue);
+  DisplaySlate();
 }
 
-void computer()
-{
-  while (i<225)
-  {
-    nextNum = random (1,5);
-    sequence[i] = nextNum;
-    i++
-  }
+  
 
-void player()
+void player()  //code for player
 {
   int marker = 0;
-  while (marker < myArray.length)
+  while (marker < sizeof(myArray))
   {
   CheckButtonsPress();
   if (Button_Up)
@@ -152,16 +193,17 @@ void player()
   }
   if (Button_Left)
   {
-    myArraymarker[marker] = 270;  
+    myArray[marker] = 270;  
     marker++;  
   }
+  }
+}
   
-  //code that compares myArray to SolutionArray
-  
-  void showArray()
+ 
+  void showArray()  //code that compares myArray to startArray
   {
     int marker = 0;
-    while (marker < solutionArray.length)
+    while (marker < sizeof(myArray))
     {
       if (myArray[marker] == 360)
       {
@@ -175,12 +217,37 @@ void player()
       {
         lightYellow();
       }
-      if (myArray[marker] == 270()
+      if (myArray[marker] == 270)
       {
         lightBlue();
       }  
     }
   }
+  
+  void startArray()  //code for computer
+  {
+    int marker = 0;
+    for (int i = 0; i < marker; i++)
+    {
+      if (myArray[i] == 360)
+        lightGreen();
+      if (myArray[i] == 90)
+        lightRed();
+      if (myArray[i] == 180)
+        lightYellow();
+      if (myArray[i] == 270)
+        lightBlue();
+        DisplaySlate();
+    }
+  }
+      
+  
+    
+   
+  
+ 
+    
+  
   
 
   
