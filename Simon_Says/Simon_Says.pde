@@ -8,8 +8,7 @@ struct Point
 };
 
 int myArray[4];
-boolean playerTurn = false;
-boolean computerTurn = false;
+boolean computerTurn, playerTurn, correct, cont;
 
 
 
@@ -19,6 +18,10 @@ void setup()                    // run once, when the sketch starts
   Serial.begin(9600);
   showArray();
   startArray();
+  correct = false;
+  cont = false;
+  playerTurn = false;
+  computerTurn = false;
 }
 
 void lightGreen() //lights green and plays tone, up
@@ -94,24 +97,6 @@ void lightBlue()
 }
 
 
-
-void loop()                     // run over and over again
-{
-  drawBoard();
-  DisplaySlate();
-  
-  if (computerTurn)
-  startArray();
-  DisplaySlate();
-  delay(200);
-  ClearSlate();
-  
-  if (playerTurn)
-  player();
-  else showArray();  
-  DisplaySlate();
-}
-
 void drawBoard()    //displays dim colored board
 {
   DrawPx(4,5,DimGreen); //up
@@ -168,6 +153,34 @@ void drawBoard()    //displays dim colored board
   DisplaySlate();
 }
 
+void redX()
+{ 
+  DrawPx(0,0,Red);  //when player makes a mistake, red x
+  DrawPx(0,1,Red);
+  DrawPx(1,1,Red);
+  DrawPx(1,0,Red);
+  DrawPx(6,0,Red);
+  DrawPx(7,0,Red);
+  DrawPx(7,1,Red);
+  DrawPx(6,1,Red);
+  DrawPx(2,2,Red);
+  DrawPx(5,2,Red);
+  DrawPx(3,3,Red);
+  DrawPx(4,3,Red);
+  DrawPx(3,4,Red);
+  DrawPx(4,4,Red);
+  DrawPx(2,5,Red);
+  DrawPx(5,5,Red);
+  DrawPx(0,6,Red);
+  DrawPx(1,6,Red);
+  DrawPx(6,6,Red);
+  DrawPx(7,6,Red);
+  DrawPx(0,7,Red);
+  DrawPx(1,7,Red);
+  DrawPx(6,7,Red);
+  DrawPx(7,7,Red);
+  DisplaySlate();
+}
   
 
 void player()  //code for player
@@ -224,8 +237,8 @@ void player()  //code for player
     }
   }
   
-  void startArray()  //code for computer
-  {
+ void startArray()  //code for computer
+ {
     int marker = 0;
     for (int i = 0; i < marker; i++)
     {
@@ -239,9 +252,48 @@ void player()  //code for player
         lightBlue();
         DisplaySlate();
     }
-  }
+ }
+
+
+if(!cont && correct);  //code for myArray
+{
+  i = 0;
+  while (i < score + 1 && correct)
+  {
+    CheckButtonsDown();
+    
+    if (Button_Up)
+    {
+    lightGreen();
+    drawBoard();
+    myArray[i] = 1;
+    
+    if (myArray[marker] == startArray[i]
+    {
+      correct = true;
+      i++;
+    }    
+  }  
+}
+
+
       
+  void loop()                     // run over and over again
+{
+  drawBoard();
+  DisplaySlate();
   
+  if (computerTurn)
+  startArray();
+  DisplaySlate();
+  delay(200);
+  ClearSlate();
+  
+  if (playerTurn)
+  player();
+  else showArray();  
+  DisplaySlate();
+}
     
    
   
