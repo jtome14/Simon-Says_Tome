@@ -1,27 +1,24 @@
 // Tome Says by Jordan Tome
 #include <MeggyJrSimple.h>    // Required code, line 1 of 2.
 
-struct Point 
-{
- int x;
- int y;
-};
 
-int myArray[4];
-boolean computerTurn, playerTurn, correct, cont;
-
+byte computerTurn[256], playerTurn[256], i, b, j, score, Light, Number;
+boolean correct, repeat, start, cont;
 
 
 void setup()                    // run once, when the sketch starts
 {
   MeggyJrSimpleSetup();      // Required code, line 2 of 2.
   Serial.begin(9600);
-  showArray();
-  startArray();
   correct = false;
   cont = false;
-  playerTurn = false;
-  computerTurn = false;
+  repeat = false;
+  start = true;
+  score= 0;
+  i = 0;
+
+
+
 }
 
 void lightGreen() //lights green and plays tone, up
@@ -183,61 +180,101 @@ void redX()
 }
   
 
-void player()  //code for player
+if (!cont && correct);  //code for player
 {
-  int marker = 0;
-  while (marker < sizeof(myArray))
+  j = 0;
+  while (j < score + 1 && correct)
   {
-  CheckButtonsPress();
+  CheckButtonsDown();
   if (Button_Up)
   {
-    myArray[marker] = 360;
-    marker++;
+    lightGreen();
+    drawBoard();
+    playerTurn[j] = 1;
+    
+  if (playerTurn[j] == computerTurn[j])
+  {
+    correct = true;
+    j++
   }
+  else
+  {
+    correct = false;
+    end();
+  }
+  }
+  
   if (Button_Right)
   { 
-    myArray[marker] = 90;    
-    marker++;
+    lightRed();
+    drawBoard();
+    playerTurn[j] = 2;
+    
+  if (playerTurn[j] == computerTurn[j])
+  {
+    correct = true;
+    j++
   }
+  else
+  {
+    correct = false;
+    end();
+  }
+  }
+  
   if (Button_Down)
   {   
-    myArray[marker] = 180;  
-    marker++;  
+    lightYellow();
+    drawBoard();
+    playerTurn[j] = 3;
+    
+  if (playerTurn[j] == computerTurn[j])
+  {
+    correct = true;
+    j++
   }
+  else
+  {
+    correct = false;
+    end();
+  }
+  }
+  
   if (Button_Left)
   {
-    myArray[marker] = 270;  
-    marker++;  
+    lightBreen();
+    drawBoard();
+    playerTurn[j] = 4;
+    
+  if (playerTurn[j] == computerTurn[j])
+  {
+    correct = true;
+    j++
+  }
+  else
+  {
+    correct = false;
+    end();
   }
   }
+  }
+  
+  if (correct)
+  {
+    cont = true;
+    score++;
+    SetAuxLEDs(score + 1);
+    delay(500);
+  }
+}
+DisplaySlate();
+Tone_Update();
 }
   
  
-  void showArray()  //code that compares myArray to startArray
-  {
-    int marker = 0;
-    while (marker < sizeof(myArray))
-    {
-      if (myArray[marker] == 360)
-      {
-        lightGreen();
-      }
-      if (myArray[marker] == 90)
-      {
-        lightRed();
-      }
-      if (myArray[marker] == 180)
-      {
-        lightYellow();
-      }
-      if (myArray[marker] == 270)
-      {
-        lightBlue();
-      }  
-    }
-  }
+
   
- void startArray()  //code for computer
+ void showArray()  //code for computer
  {
     int marker = 0;
     for (int i = 0; i < marker; i++)
@@ -251,48 +288,32 @@ void player()  //code for player
       if (myArray[i] == 270)
         lightBlue();
         DisplaySlate();
-    }
- }
+        
 
 
-if(!cont && correct);  //code for myArray
-{
-  i = 0;
-  while (i < score + 1 && correct)
-  {
-    CheckButtonsDown();
-    
-    if (Button_Up)
-    {
-    lightGreen();
-    drawBoard();
-    myArray[i] = 1;
-    
-    if (myArray[marker] == startArray[i]
-    {
-      correct = true;
-      i++;
-    }    
-  }  
-}
+
 
 
       
-  void loop()                     // run over and over again
+void loop()                     // run over and over again
 {
   drawBoard();
   DisplaySlate();
   
+  
   if (computerTurn)
-  startArray();
+  showArray();
   DisplaySlate();
   delay(200);
   ClearSlate();
   
   if (playerTurn)
-  player();
+  playerArray();
   else showArray();  
   DisplaySlate();
+  
+
+  
 }
     
    
