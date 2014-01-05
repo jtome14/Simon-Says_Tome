@@ -150,7 +150,7 @@ void drawBoard()    //displays dim colored board
   DisplaySlate();
 }
 
-void redX()
+void gameOver()
 { 
   DrawPx(0,0,Red);  //when player makes a mistake, red x
   DrawPx(0,1,Red);
@@ -178,8 +178,59 @@ void redX()
   DrawPx(7,7,Red);
   DisplaySlate();
 }
-  
 
+if (cont && correct) // plays back until current round 
+{
+  b = 0;
+  while (b < score + 1)
+  {
+    delay(150)
+    Light = computerTurn[b]
+    switch (Light)
+    {
+        case 1:
+        {
+        lightYellow();
+        delay(100);
+        lightNone();
+        b++;
+        break;
+        }
+        
+        case 2:
+        {
+        lightRed();
+        delay(100);
+        lightNone();
+        b++;
+        break;
+        }
+        
+        case 3:
+        {
+        lightBlue();
+        delay(100);
+        lightNone();
+        b++;
+        break;
+        }
+        
+        case 4:
+        {
+        lightGreen();
+        delay(100);
+        lightNone();
+        b++;
+        break;
+        }
+        
+      }
+      
+    Tone_Update();
+    cont = false;     
+ }
+      
+    
 if (!cont && correct);  //code for player
 {
   j = 0;
@@ -242,7 +293,7 @@ if (!cont && correct);  //code for player
   
   if (Button_Left)
   {
-    lightBreen();
+    lightBlue();
     drawBoard();
     playerTurn[j] = 4;
     
@@ -272,27 +323,49 @@ Tone_Update();
 }
   
  
-
+void end()
+{
+  Tone_Start(43243, 1000); //error tone
+  ClearSlate();
+  redX();
+  DisplaySlate();
+  delay(1000);
+  Tone_Update();
   
- void showArray()  //code for computer
- {
-    int marker = 0;
-    for (int i = 0; i < marker; i++)
+  while(!correct && !start)
+  {
+    lightGreen();
+    SetAuxLEDs(0);
+    delay(100)
+    ClearSlate();
+    gameOver();
+    lightRed();
+    SetAuxLEDs(score + 1);
+    delay(100);
+    ClearSlate();
+    gameOver();
+    lightYellow();
+    SetAuxLEDs(0);
+    delay(100)
+    ClearSlate();
+    gameOver();
+    lightBlue();
+    SetAuxLEDs(score + 1);
+    delay(100)
+    ClearSlate();
+    gameOver();
+    
+    CheckButtonsPress();
+    if (Button_A)  //resets game
     {
-      if (myArray[i] == 360)
-        lightGreen();
-      if (myArray[i] == 90)
-        lightRed();
-      if (myArray[i] == 180)
-        lightYellow();
-      if (myArray[i] == 270)
-        lightBlue();
-        DisplaySlate();
-        
-
-
-
-
+      ClearSlate();
+      DisplaySlate();
+      repeat = true;
+      score = 0;
+      start = true;
+    }
+  }
+}
 
       
 void loop()                     // run over and over again
