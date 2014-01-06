@@ -8,8 +8,7 @@ boolean correct, repeat, start, cont;
 
 void setup()                    // run once, when the sketch starts
 {
-  MeggyJrSimpleSetup();      // Required code, line 2 of 2.
-  Serial.begin(9600);
+  MeggyJrSimpleSetup();      // Required code, line 2 of 2
   correct = false;
   cont = false;
   repeat = false;
@@ -19,6 +18,74 @@ void setup()                    // run once, when the sketch starts
 
 
 
+}
+
+void shineGreen() //lights green 
+{
+  DrawPx(4,5,Green);
+  DrawPx(4,6,Green);
+  DrawPx(4,7,Green);
+  DrawPx(3,5,Green);
+  DrawPx(3,6,Green);
+  DrawPx(3,7,Green);
+  DrawPx(2,6,Green);
+  DrawPx(2,7,Green);
+  DrawPx(1,7,Green);
+  DrawPx(5,6,Green);
+  DrawPx(5,7,Green);
+  DrawPx(6,7,Green);
+  DisplaySlate();
+}
+
+void shineRed() //lights red 
+{
+  DrawPx(6,4,Red);  
+  DrawPx(6,3,Red);
+  DrawPx(5,4,Red);
+  DrawPx(5,3,Red);
+  DrawPx(7,2,Red);
+  DrawPx(7,3,Red);
+  DrawPx(7,4,Red);
+  DrawPx(7,5,Red);
+  DrawPx(7,6,Red);
+  DrawPx(6,2,Red);
+  DrawPx(6,5,Red);
+  DrawPx(7,1,Red);
+  DisplaySlate();
+}
+
+void shineYellow()  //lights yellow
+{
+  DrawPx(0,4,Yellow);
+  DrawPx(0,3,Yellow);
+  DrawPx(0,2,Yellow);
+  DrawPx(0,1,Yellow);
+  DrawPx(0,5,Yellow);
+  DrawPx(0,6,Yellow);
+  DrawPx(1,2,Yellow);
+  DrawPx(1,5,Yellow);
+  DrawPx(1,4,Yellow);  
+  DrawPx(1,3,Yellow);
+  DrawPx(2,4,Yellow);
+  DrawPx(2,3,Yellow);
+  DisplaySlate();
+}
+
+void shineBlue() //lights blue
+{
+  DrawPx(3,2,Blue);
+  DrawPx(3,1,Blue);
+  DrawPx(3,0,Blue);
+  DrawPx(2,1,Blue);
+  DrawPx(1,0,Blue);
+  DrawPx(4,2,Blue);
+  DrawPx(4,1,Blue);
+  DrawPx(4,0,Blue);
+  DrawPx(5,1,Blue);
+  DrawPx(5,0,Blue);
+  DrawPx(6,0,Blue);
+  DrawPx(2,0,Blue);
+  DisplaySlate();
 }
 
 void lightGreen() //lights green and plays tone, up
@@ -37,6 +104,8 @@ void lightGreen() //lights green and plays tone, up
   DrawPx(6,7,Green);
   Tone_Start(ToneF5, 200);
   DisplaySlate();
+  delay(200)
+  Tone_Update();
 }
 
 void lightRed() //lights red and plays tone, right
@@ -55,6 +124,8 @@ void lightRed() //lights red and plays tone, right
   DrawPx(7,1,Red);
   Tone_Start(ToneC5, 200);
   DisplaySlate();
+  delay(200);
+  Tone_Update();
 }
 
 void lightYellow()  //lights yellow and plays tone, left
@@ -73,9 +144,11 @@ void lightYellow()  //lights yellow and plays tone, left
   DrawPx(2,3,Yellow);
   Tone_Start(ToneD5, 200);
   DisplaySlate();
+  delay(200);
+  Tone_Update();
 }
 
-void lightBlue()
+void lightBlue() //lights blue and plays tone
 {
   DrawPx(3,2,Blue);
   DrawPx(3,1,Blue);
@@ -91,6 +164,8 @@ void lightBlue()
   DrawPx(2,0,Blue);
   Tone_Start(ToneE5, 200);
   DisplaySlate();
+  delay(200);
+  Tone_Update();
 }
 
 
@@ -179,20 +254,112 @@ void gameOver()
   DisplaySlate();
 }
 
+void end()
+{
+  Tone_Start(43243, 1000); //error tone
+  ClearSlate();
+  gameOver();
+  DisplaySlate();
+  delay(1000);
+  Tone_Update();
+  
+  while(!correct && !start)
+  {
+    shineGreen();
+    SetAuxLEDs(0);
+    delay(100);
+    ClearSlate();
+    gameOver();
+    shineYellow();
+    SetAuxLEDs(score + 1);
+    delay(100);
+    ClearSlate();
+    gameOver();
+    shineBlue();
+    SetAuxLEDs(0);
+    delay(100);
+    ClearSlate();
+    gameOver();
+    shineRed();
+    SetAuxLEDs(score + 1);
+    delay(100);
+    ClearSlate();
+    gameOver();
+    
+    CheckButtonsPress();
+    if (Button_A)  //resets game
+    {
+      ClearSlate();
+      DisplaySlate();
+      repeat = true;
+      score = 0;
+      start = true;
+    }
+  }
+}
+
+void loop()                     // run over and over again
+{
+  while (start)
+  {
+    if (!repeat)  //Repeat is set to true when game ends.
+    {
+      randomSeed(millis());
+      drawBoard();
+      DisplaySlate();
+      delay(1000);
+      ClearSlate();
+      DisplaySlate();
+      delay(1000);
+      CheckButtonsDown();
+    }
+    if (Button_A)  //resets game
+    {
+      Tone_Start(ToneD6, 200);
+      delay(200);
+      Tone_Update();
+      Tone_Start(ToneF6, 200);
+      delay(200);
+      Tone_Update();
+      Tone_Start(ToneG6, 200);
+      delay(200);
+      Tone_Update();
+      
+      i = 0;
+      
+      while (i < 255)  //random color sequence
+      {
+        Number = random(1,5);
+        computerTurn[i] = Number;
+        i++;
+      }
+      
+      correct = true;
+      cont = true;
+      Tone_Update();
+      drawBoard();
+      DisplaySlate();
+      delay(1000);
+      SetAuxLEDs(score + 1);
+      start = false;
+    }
+  }  
+
+    
 if (cont && correct) // plays back until current round 
 {
   b = 0;
   while (b < score + 1)
   {
-    delay(150)
-    Light = computerTurn[b]
+    delay(150);
+    Light = computerTurn[b];
     switch (Light)
     {
         case 1:
         {
         lightYellow();
         delay(100);
-        lightNone();
+        drawBoard();
         b++;
         break;
         }
@@ -201,25 +368,25 @@ if (cont && correct) // plays back until current round
         {
         lightRed();
         delay(100);
-        lightNone();
+        drawBoard();
         b++;
         break;
         }
         
         case 3:
         {
-        lightBlue();
+        lightGreen();
         delay(100);
-        lightNone();
+        drawBoard();
         b++;
         break;
         }
         
         case 4:
         {
-        lightGreen();
+        lightBlue();
         delay(100);
-        lightNone();
+        drawBoard();
         b++;
         break;
         }
@@ -237,16 +404,17 @@ if (!cont && correct);  //code for player
   while (j < score + 1 && correct)
   {
   CheckButtonsDown();
-  if (Button_Up)
+  
+  if (Button_Left)
   {
-    lightGreen();
+    lightYellow();
     drawBoard();
     playerTurn[j] = 1;
     
   if (playerTurn[j] == computerTurn[j])
   {
     correct = true;
-    j++
+    j++;
   }
   else
   {
@@ -264,7 +432,25 @@ if (!cont && correct);  //code for player
   if (playerTurn[j] == computerTurn[j])
   {
     correct = true;
-    j++
+    j++;
+  }
+  else
+  {
+    correct = false;
+    end();
+  }
+  }
+  
+  if (Button_Up)
+  {   
+    lightGreen();
+    drawBoard();
+    playerTurn[j] = 3;
+    
+  if (playerTurn[j] == computerTurn[j])
+  {
+    correct = true;
+    j++;
   }
   else
   {
@@ -274,24 +460,6 @@ if (!cont && correct);  //code for player
   }
   
   if (Button_Down)
-  {   
-    lightYellow();
-    drawBoard();
-    playerTurn[j] = 3;
-    
-  if (playerTurn[j] == computerTurn[j])
-  {
-    correct = true;
-    j++
-  }
-  else
-  {
-    correct = false;
-    end();
-  }
-  }
-  
-  if (Button_Left)
   {
     lightBlue();
     drawBoard();
@@ -300,13 +468,14 @@ if (!cont && correct);  //code for player
   if (playerTurn[j] == computerTurn[j])
   {
     correct = true;
-    j++
+    j++;
   }
   else
   {
     correct = false;
     end();
   }
+  
   }
   }
   
@@ -317,78 +486,17 @@ if (!cont && correct);  //code for player
     SetAuxLEDs(score + 1);
     delay(500);
   }
+  }
 }
 DisplaySlate();
 Tone_Update();
 }
   
  
-void end()
-{
-  Tone_Start(43243, 1000); //error tone
-  ClearSlate();
-  redX();
-  DisplaySlate();
-  delay(1000);
-  Tone_Update();
-  
-  while(!correct && !start)
-  {
-    lightGreen();
-    SetAuxLEDs(0);
-    delay(100)
-    ClearSlate();
-    gameOver();
-    lightRed();
-    SetAuxLEDs(score + 1);
-    delay(100);
-    ClearSlate();
-    gameOver();
-    lightYellow();
-    SetAuxLEDs(0);
-    delay(100)
-    ClearSlate();
-    gameOver();
-    lightBlue();
-    SetAuxLEDs(score + 1);
-    delay(100)
-    ClearSlate();
-    gameOver();
-    
-    CheckButtonsPress();
-    if (Button_A)  //resets game
-    {
-      ClearSlate();
-      DisplaySlate();
-      repeat = true;
-      score = 0;
-      start = true;
-    }
-  }
-}
+
 
       
-void loop()                     // run over and over again
-{
-  drawBoard();
-  DisplaySlate();
-  
-  
-  if (computerTurn)
-  showArray();
-  DisplaySlate();
-  delay(200);
-  ClearSlate();
-  
-  if (playerTurn)
-  playerArray();
-  else showArray();  
-  DisplaySlate();
-  
 
-  
-}
-    
    
   
  
